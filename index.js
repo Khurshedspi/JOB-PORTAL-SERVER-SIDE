@@ -35,6 +35,8 @@ async function run() {
     const jobsCollection = client.db("jobPortal").collection("jobs");
     const jobApplicationCollection = client.db('jobPortal').collection('job_applications');
 
+
+    // get all data 
 app.get('/jobs', async(req, res) =>{
     const cursor = jobsCollection.find();
     const result = await cursor.toArray();
@@ -42,6 +44,8 @@ app.get('/jobs', async(req, res) =>{
 
 })
 
+
+// get specific data
 app.get('/jobs/:id', async (req, res) =>{
   const id = req.params.id;
   const query = {_id: new ObjectId(id)}
@@ -51,6 +55,15 @@ app.get('/jobs/:id', async (req, res) =>{
 })
 
 // job application apis 
+// get all data, get one data, get some data [0, 1, many]
+
+app.get('/job-application', async(req, res) =>{
+  const email = req.query.email;
+  const query = {applicant_email: email}
+  const result = await jobApplicationCollection.find(query).toArray();
+  res.send(result);
+})
+
 app.post('/job-applications', async(req, res) =>{
   const application = req.body;
   const result = await jobApplicationCollection.insertOne(application);
